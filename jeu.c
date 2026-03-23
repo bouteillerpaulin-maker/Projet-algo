@@ -2,8 +2,11 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_image.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <direct.h>  // _getcwd
+#include <io.h>      // _access
 #include "config.h"
 #include "jeu.h"
 #include "joueur.h"
@@ -81,6 +84,12 @@ void boucle_jeu(void) {
     }
     printf("al_init_ttf_addon OK\n"); fflush(stdout);
 
+    if (!al_init_image_addon()) {
+        printf("ERREUR : al_init_image_addon a échoué\n");
+        return;
+    }
+    printf("al_init_image_addon OK\n"); fflush(stdout);
+
 al_set_new_display_flags(ALLEGRO_WINDOWED);
 al_set_new_display_flags(ALLEGRO_OPENGL);
 al_set_new_display_option(ALLEGRO_OPENGL_MAJOR_VERSION, 2, ALLEGRO_REQUIRE);
@@ -141,6 +150,39 @@ display = al_create_display(800, 600);
     int touche_haut = 0, touche_bas = 0, touche_gauche = 0, touche_droite = 0;
 
     init_boss(&boss);
+
+    ALLEGRO_BITMAP *ennemi_sprite = NULL;
+    const char *nom_sprite = "ennemi_gauche.png";
+    char cwd[1024];
+    char fullpath[2048];
+
+    for (int essai = 0; essai < 40 && !ennemi_sprite; ++essai) {
+        if (_access(nom_sprite, 0) != 0) {
+            if (_getcwd(cwd, sizeof(cwd))) {
+                printf("OneDrive pas encore local, essai %d/40 (CWD=%s)\n", essai + 1, cwd);
+            }
+            al_rest(0.05);
+            continue;
+        }
+
+        ennemi_sprite = al_load_bitmap(nom_sprite);
+        if (!ennemi_sprite) {
+            if (_getcwd(cwd, sizeof(cwd))) {
+                snprintf(fullpath, sizeof(fullpath), "%s\\%s", cwd, nom_sprite);
+                printf("Chargement direct échoué, réessai chemin complet : %s\n", fullpath);
+                ennemi_sprite = al_load_bitmap(fullpath);
+            }
+        }
+
+        if (!ennemi_sprite) {
+            printf("Toujours échoué, essai %d/40.\n", essai + 1);
+            al_rest(0.05);
+        }
+    }
+
+    if (!ennemi_sprite) {
+        printf("ERREUR : impossible de charger ennemi_gauche.png après 40 essais. Relance en copie hors OneDrive.\n");
+    }
 
     al_start_timer(timer);
 
@@ -296,7 +338,7 @@ display = al_create_display(800, 600);
 
                 dessiner_joueur(&joueur);
                 dessiner_tirs(tirs, MAX_TIRS);
-                dessiner_ennemis(ennemis, MAX_ENNEMIS);
+                dessiner_ennemis(ennemis, MAX_ENNEMIS, ennemi_sprite);
                 dessiner_boss(&boss);
 
                 char buf[64];
@@ -312,6 +354,9 @@ display = al_create_display(800, 600);
         }
     }
 
+    if (ennemi_sprite) {
+        al_destroy_bitmap(ennemi_sprite);
+    }
     al_destroy_font(font);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);

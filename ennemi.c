@@ -6,8 +6,8 @@
 void init_ennemis(Ennemi e[], int taille) {
     for (int i = 0; i < taille; i++) {
         e[i].actif = 0;
-        e[i].w = 30;
-        e[i].h = 20;
+        e[i].w = 80;
+        e[i].h = 80;
         e[i].pv = 1;
     }
 }
@@ -34,13 +34,21 @@ void maj_ennemis(Ennemi e[], int taille) {
     }
 }
 
-void dessiner_ennemis(Ennemi e[], int taille) {
+void dessiner_ennemis(Ennemi e[], int taille, ALLEGRO_BITMAP *sprite) {
+    if (!sprite) {
+        return;
+    }
+
+    float bmp_w = al_get_bitmap_width(sprite);
+    float bmp_h = al_get_bitmap_height(sprite);
+
     for (int i = 0; i < taille; i++) {
-        if (e[i].actif) {
-            al_draw_filled_rectangle(e[i].x, e[i].y,
-                                     e[i].x + e[i].w,
-                                     e[i].y + e[i].h,
-                                     al_map_rgb(255, 0, 0));
-        }
+        if (!e[i].actif) continue;
+
+        al_draw_scaled_bitmap(sprite,
+                              0, 0, bmp_w, bmp_h,
+                              e[i].x, e[i].y,
+                              e[i].w, e[i].h,
+                              0);
     }
 }

@@ -1,6 +1,8 @@
 #ifndef ENNEMI_H
 #define ENNEMI_H
 
+#include <allegro5/allegro.h>
+
 typedef struct {
     float x, y;
     float w, h;
@@ -11,6 +13,6 @@ typedef struct {
 void init_ennemis(Ennemi e[], int taille);
 void spawn_ennemi(Ennemi e[], int taille, float x, float y, int pv);
 void maj_ennemis(Ennemi e[], int taille);
-void dessiner_ennemis(Ennemi e[], int taille);
+void dessiner_ennemis(Ennemi e[], int taille, ALLEGRO_BITMAP *sprite);
 
 #endif
