@@ -15,6 +15,7 @@
 #include "collision.h"
 #include "niveau.h"
 #include "boss.h"
+#include "background.h"
 
 static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
     al_clear_to_color(al_map_rgb(0, 0, 40));
@@ -183,7 +184,7 @@ display = al_create_display(800, 600);
     if (!ennemi_sprite) {
         printf("ERREUR : impossible de charger ennemi_gauche.png après 40 essais. Relance en copie hors OneDrive.\n");
     }
-
+    init_background();
     al_start_timer(timer);
 
     int fin = 0;
@@ -202,6 +203,7 @@ display = al_create_display(800, 600);
                 maj_joueur(&joueur, touche_haut, touche_bas, touche_gauche, touche_droite);
                 maj_tirs(tirs, MAX_TIRS);
                 maj_ennemis(ennemis, MAX_ENNEMIS);
+                maj_background(); 
 
                 script_niveau(&niveau, ennemis, MAX_ENNEMIS, frame);
 
@@ -331,10 +333,7 @@ display = al_create_display(800, 600);
             if (etat == ETAT_MENU) {
                 dessiner_menu(font, selection_menu);
             } else if (etat == ETAT_JEU) {
-                al_clear_to_color(al_map_rgb(0, 0, 20));
-
-                al_draw_filled_rectangle(0, 0, LARGEUR_FENETRE, HAUTEUR_FENETRE,
-                                         al_map_rgb(0, 0, 40));
+                dessiner_background();
 
                 dessiner_joueur(&joueur);
                 dessiner_tirs(tirs, MAX_TIRS);
