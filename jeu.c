@@ -5,8 +5,6 @@
 #include <allegro5/allegro_image.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <direct.h>  // _getcwd
-#include <io.h>      // _access
 #include "config.h"
 #include "jeu.h"
 #include "joueur.h"
@@ -62,85 +60,66 @@ void boucle_jeu(void) {
         printf("ERREUR : al_init a échoué\n");
         return;
     }
-    printf("al_init OK\n"); fflush(stdout);
-
     if (!al_install_keyboard()) {
         printf("ERREUR : al_install_keyboard a échoué\n");
         return;
     }
-    printf("al_install_keyboard OK\n"); fflush(stdout);
-
     if (!al_init_primitives_addon()) {
         printf("ERREUR : al_init_primitives_addon a échoué\n");
         return;
     }
-    printf("al_init_primitives_addon OK\n"); fflush(stdout);
-
     al_init_font_addon();
-    printf("al_init_font_addon OK\n"); fflush(stdout);
-
     if (!al_init_ttf_addon()) {
         printf("ERREUR : al_init_ttf_addon a échoué\n");
         return;
     }
-    printf("al_init_ttf_addon OK\n"); fflush(stdout);
-
     if (!al_init_image_addon()) {
         printf("ERREUR : al_init_image_addon a échoué\n");
         return;
     }
-    printf("al_init_image_addon OK\n"); fflush(stdout);
 
-al_set_new_display_flags(ALLEGRO_WINDOWED);
-al_set_new_display_flags(ALLEGRO_OPENGL);
-al_set_new_display_option(ALLEGRO_OPENGL_MAJOR_VERSION, 2, ALLEGRO_REQUIRE);
-al_set_new_display_option(ALLEGRO_OPENGL_MINOR_VERSION, 1, ALLEGRO_REQUIRE);
+    al_set_new_display_flags(ALLEGRO_WINDOWED);
+    al_set_new_display_flags(ALLEGRO_OPENGL);
+    al_set_new_display_option(ALLEGRO_OPENGL_MAJOR_VERSION, 2, ALLEGRO_REQUIRE);
+    al_set_new_display_option(ALLEGRO_OPENGL_MINOR_VERSION, 1, ALLEGRO_REQUIRE);
 
-display = al_create_display(800, 600);
-
+    display = al_create_display(800, 600);
     if (!display) {
         printf("ERREUR : al_create_display a renvoyé NULL\n");
         return;
     }
-    printf("display OK\n"); fflush(stdout);
 
     timer = al_create_timer(1.0 / FPS);
     if (!timer) {
-        printf("ERREUR : al_create_timer a renvoyé NULL\n");
         al_destroy_display(display);
         return;
     }
-    printf("timer OK\n"); fflush(stdout);
 
     queue = al_create_event_queue();
     if (!queue) {
-        printf("ERREUR : al_create_event_queue a renvoyé NULL\n");
         al_destroy_timer(timer);
         al_destroy_display(display);
         return;
     }
-    printf("queue OK\n"); fflush(stdout);
 
     font = al_create_builtin_font();
     if (!font) {
-        printf("ERREUR : al_create_builtin_font a renvoyé NULL\n");
         al_destroy_event_queue(queue);
         al_destroy_timer(timer);
         al_destroy_display(display);
         return;
     }
-    printf("font OK\n"); fflush(stdout);
 
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_timer_event_source(timer));
     al_register_event_source(queue, al_get_keyboard_event_source());
-    printf("event sources OK\n"); fflush(stdout);
 
     EtatJeu etat = ETAT_MENU;
     int selection_menu = 0;
 
     Joueur joueur;
     Tir tirs[MAX_TIRS];
+    TirEnnemi tirs_ennemis[MAX_TIRS_ENNEMIS];
     Ennemi ennemis[MAX_ENNEMIS];
     Niveau niveau;
     Boss boss;
@@ -151,39 +130,10 @@ display = al_create_display(800, 600);
     int touche_haut = 0, touche_bas = 0, touche_gauche = 0, touche_droite = 0;
 
     init_boss(&boss);
+    init_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
 
-    ALLEGRO_BITMAP *ennemi_sprite = NULL;
-    const char *nom_sprite = "ennemi_gauche.png";
-    char cwd[1024];
-    char fullpath[2048];
+    SpritesEnnemi sprites_ennemis = charger_sprites_ennemi();
 
-    for (int essai = 0; essai < 40 && !ennemi_sprite; ++essai) {
-        if (_access(nom_sprite, 0) != 0) {
-            if (_getcwd(cwd, sizeof(cwd))) {
-                printf("OneDrive pas encore local, essai %d/40 (CWD=%s)\n", essai + 1, cwd);
-            }
-            al_rest(0.05);
-            continue;
-        }
-
-        ennemi_sprite = al_load_bitmap(nom_sprite);
-        if (!ennemi_sprite) {
-            if (_getcwd(cwd, sizeof(cwd))) {
-                snprintf(fullpath, sizeof(fullpath), "%s\\%s", cwd, nom_sprite);
-                printf("Chargement direct échoué, réessai chemin complet : %s\n", fullpath);
-                ennemi_sprite = al_load_bitmap(fullpath);
-            }
-        }
-
-        if (!ennemi_sprite) {
-            printf("Toujours échoué, essai %d/40.\n", essai + 1);
-            al_rest(0.05);
-        }
-    }
-
-    if (!ennemi_sprite) {
-        printf("ERREUR : impossible de charger ennemi_gauche.png après 40 essais. Relance en copie hors OneDrive.\n");
-    }
     init_background();
     al_start_timer(timer);
 
@@ -202,8 +152,9 @@ display = al_create_display(800, 600);
 
                 maj_joueur(&joueur, touche_haut, touche_bas, touche_gauche, touche_droite);
                 maj_tirs(tirs, MAX_TIRS);
-                maj_ennemis(ennemis, MAX_ENNEMIS);
-                maj_background(); 
+                maj_ennemis(ennemis, MAX_ENNEMIS, joueur.x, joueur.y, tirs_ennemis, MAX_TIRS_ENNEMIS);
+                maj_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
+                maj_background();
 
                 script_niveau(&niveau, ennemis, MAX_ENNEMIS, frame);
 
@@ -222,14 +173,24 @@ display = al_create_display(800, 600);
                                                boss.x, boss.y, boss.w, boss.h)) {
                             tirs[i].actif = 0;
                             boss.pv--;
-                            if (boss.pv <= 0) {
+                            if (boss.pv <= 0)
                                 boss.actif = 0;
-                            }
                         }
                     }
                 }
 
                 collisions_joueur_ennemis(&joueur, ennemis, MAX_ENNEMIS);
+
+                for (int i = 0; i < MAX_TIRS_ENNEMIS; i++) {
+                    if (!tirs_ennemis[i].actif) continue;
+                    if (rects_en_collision(tirs_ennemis[i].x, tirs_ennemis[i].y,
+                                           tirs_ennemis[i].w, tirs_ennemis[i].h,
+                                           joueur.x, joueur.y, joueur.w, joueur.h)) {
+                        tirs_ennemis[i].actif = 0;
+                        joueur.vies--;
+                        if (joueur.vies <= 0) joueur.vivant = 0;
+                    }
+                }
 
                 if (boss.actif &&
                     rects_en_collision(joueur.x, joueur.y, joueur.w, joueur.h,
@@ -248,6 +209,7 @@ display = al_create_display(800, 600);
                         frame = 0;
                         init_ennemis(ennemis, MAX_ENNEMIS);
                         init_tirs(tirs, MAX_TIRS);
+                        init_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
                         init_boss(&boss);
                         init_joueur(&joueur);
                     } else {
@@ -282,6 +244,7 @@ display = al_create_display(800, 600);
                         init_joueur(&joueur);
                         init_tirs(tirs, MAX_TIRS);
                         init_ennemis(ennemis, MAX_ENNEMIS);
+                        init_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
                         init_niveau(&niveau, niveau_courant);
                         init_boss(&boss);
                         frame = 0;
@@ -334,10 +297,10 @@ display = al_create_display(800, 600);
                 dessiner_menu(font, selection_menu);
             } else if (etat == ETAT_JEU) {
                 dessiner_background();
-
                 dessiner_joueur(&joueur);
                 dessiner_tirs(tirs, MAX_TIRS);
-                dessiner_ennemis(ennemis, MAX_ENNEMIS, ennemi_sprite);
+                dessiner_ennemis(ennemis, MAX_ENNEMIS, &sprites_ennemis);
+                dessiner_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
                 dessiner_boss(&boss);
 
                 char buf[64];
@@ -353,9 +316,7 @@ display = al_create_display(800, 600);
         }
     }
 
-    if (ennemi_sprite) {
-        al_destroy_bitmap(ennemi_sprite);
-    }
+    liberer_sprites_ennemi(&sprites_ennemis);
     al_destroy_font(font);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
