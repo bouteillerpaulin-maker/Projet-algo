@@ -17,7 +17,7 @@
 
 static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
     al_clear_to_color(al_map_rgb(0, 0, 40));
-    al_draw_text(font, al_map_rgb(255, 255, 255), LARGEUR_FENETRE / 2, 100, ALLEGRO_ALIGN_CENTER, "ECE-TYPE");
+    al_draw_text(font, al_map_rgb(255, 255, 255), LARGEUR_FENETRE / 2, 300, ALLEGRO_ALIGN_CENTER, "ECE-TYPE");
     const char *items[] = {
         "Nouvelle partie",
         "Niveau 1",
@@ -27,7 +27,7 @@ static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
     };
     for (int i = 0; i < 5; i++) {
         ALLEGRO_COLOR c = (i == selection) ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200);
-        al_draw_text(font, c, LARGEUR_FENETRE / 2, 200 + i * 40, ALLEGRO_ALIGN_CENTER, items[i]);
+        al_draw_text(font, c, LARGEUR_FENETRE / 2, 400 + i * 50, ALLEGRO_ALIGN_CENTER, items[i]);
     }
 }
 
@@ -83,7 +83,7 @@ void boucle_jeu(void) {
     al_set_new_display_option(ALLEGRO_OPENGL_MAJOR_VERSION, 2, ALLEGRO_REQUIRE);
     al_set_new_display_option(ALLEGRO_OPENGL_MINOR_VERSION, 1, ALLEGRO_REQUIRE);
 
-    display = al_create_display(800, 600);
+    display = al_create_display(1920, 1000);
     if (!display) {
         printf("ERREUR : al_create_display a renvoyé NULL\n");
         return;

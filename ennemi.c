@@ -6,9 +6,8 @@
 #include "ennemi.h"
 #include "config.h"
 
-// ----------------------------------------------------------------
 // Chargement des sprites
-// ----------------------------------------------------------------
+
 
 SpritesEnnemi charger_sprites_ennemi(void) {
     SpritesEnnemi s;
@@ -42,9 +41,7 @@ void liberer_sprites_ennemi(SpritesEnnemi *s) {
     if (s->gauche) al_destroy_bitmap(s->gauche);
 }
 
-// ----------------------------------------------------------------
 // Tirs ennemis
-// ----------------------------------------------------------------
 
 void init_tirs_ennemis(TirEnnemi t[], int taille) {
     for (int i = 0; i < taille; i++) {
@@ -84,9 +81,7 @@ static void tirer_ennemi(TirEnnemi tirs[], int nb_tirs, float x, float y) {
     }
 }
 
-// ----------------------------------------------------------------
 // Ennemis
-// ----------------------------------------------------------------
 
 void init_ennemis(Ennemi e[], int taille) {
     for (int i = 0; i < taille; i++) {
@@ -171,7 +166,6 @@ void maj_ennemis(Ennemi e[], int taille, float joueur_x, float joueur_y,
             // Le y_base descend légèrement avec x pour donner un effet de trajectoire courbe
             float new_y = e[i].y_base + sinf(e[i].phase) * e[i].amp;
 
-            // Clamp dans l'écran
             if (new_y < 0) new_y = 0;
             if (new_y + e[i].h > HAUTEUR_FENETRE) new_y = HAUTEUR_FENETRE - e[i].h;
 

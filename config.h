@@ -1,8 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define LARGEUR_FENETRE  800
-#define HAUTEUR_FENETRE  600
+#define LARGEUR_FENETRE  1920
+#define HAUTEUR_FENETRE  1000
 #define FPS              60
 
 #define VITESSE_JOUEUR   5
