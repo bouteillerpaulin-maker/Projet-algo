@@ -6,8 +6,8 @@
 void init_tirs(Tir tirs[], int taille) {
     for (int i = 0; i < taille; i++) {
         tirs[i].actif = 0;
-        tirs[i].w = 10;
-        tirs[i].h = 4;
+        tirs[i].w = 25;
+        tirs[i].h = 3;
     }
 }
 
@@ -38,7 +38,7 @@ void dessiner_tirs(Tir tirs[], int taille) {
             al_draw_filled_rectangle(tirs[i].x, tirs[i].y,
                                      tirs[i].x + tirs[i].w,
                                      tirs[i].y + tirs[i].h,
-                                     al_map_rgb(255, 255, 0));
+                                     al_map_rgb(0, 255, 255));
         }
     }
 }

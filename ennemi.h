@@ -1,5 +1,6 @@
 #ifndef ENNEMI_H
 #define ENNEMI_H
+#include "tir.h"
 
 #include <allegro5/allegro.h>
 
@@ -9,12 +10,20 @@
 #define VITESSE_CHARGE_MAX  2.0f
 #define DISTANCE_CHARGE     280.0f
 
-// Sprites directionnels
+// Types de comportement
+typedef enum {
+    COMPORT_SERPENT   = 0,  // sinusoïde en serpent (défaut)
+    COMPORT_VAGUE     = 1,  // tout le groupe monte/descend ensemble
+    COMPORT_TOURBILLON= 2,  // rotation autour d'un centre
+    COMPORT_KAMIKAZE  = 3,  // fonce en accélérant vers le joueur
+} ComportEnnemi;
+
 typedef struct {
-    ALLEGRO_BITMAP *haut[2];    // ennehaut1.png, ennehaut2.png
-    ALLEGRO_BITMAP *bas[2];     // ennebas1.png,  ennebas2.png
-    ALLEGRO_BITMAP *droite[2];  // ennedr1.png,   ennedr2.png
-    ALLEGRO_BITMAP *gauche;     // ennegh2.png (une seule frame)
+    ALLEGRO_BITMAP *haut[2];
+    ALLEGRO_BITMAP *bas[2];
+    ALLEGRO_BITMAP *droite[2];
+    ALLEGRO_BITMAP *gauche;
+    ALLEGRO_BITMAP *explosion[3];
 } SpritesEnnemi;
 
 typedef struct {
@@ -23,23 +32,42 @@ typedef struct {
     int   actif;
     int   pv;
 
-    // Mouvement sinusoidal permanent
-    float phase;    // phase individuelle (chaque ennemi oscille différemment)
-    float amp;      // amplitude verticale
-    float freq;     // fréquence d'oscillation
-    float y_base;   // centre de l'oscillation
+    // Mouvement
+    float temps;
+    float phase;
+    float amp;
+    float freq;
+    float y_base;
+    float x_offset;
 
-    // Charge vers le joueur
+    // Centre de rotation (tourbillon)
+    float cx, cy;
+    float angle;
+    float rayon;
+
+    // Charge / kamikaze
     int   en_charge;
     float vx, vy;
+    float accel;        // accélération kamikaze
+
+    // Esquive tirs
+    float esquive_vy;   // vélocité d'esquive verticale
+
+    // Comportement du groupe
+    ComportEnnemi comport;
 
     // Tir
     int cooldown_tir;
 
-    // Animation sprite
-    int   anim_frame;  // 0 ou 1
-    int   anim_timer;  // compteur changement de frame
-    float prev_y;      // pour détecter direction verticale
+    // Animation
+    int   anim_frame;
+    int   anim_timer;
+    float prev_y;
+
+    // Explosion
+    int en_explosion;
+    int explosion_frame;
+    int explosion_timer;
 } Ennemi;
 
 typedef struct {
@@ -52,9 +80,11 @@ SpritesEnnemi charger_sprites_ennemi(void);
 void          liberer_sprites_ennemi(SpritesEnnemi *s);
 
 void init_ennemis(Ennemi e[], int taille);
+void spawn_groupe(Ennemi e[], int taille, float x, float y_centre, int nb, int pv);
 void spawn_ennemi(Ennemi e[], int taille, float x, float y, int pv);
 void maj_ennemis(Ennemi e[], int taille, float joueur_x, float joueur_y,
-                 TirEnnemi tirs[], int nb_tirs);
+                 Tir tirs[], int nb_tirs,
+                 TirEnnemi tirs_ennemis[], int nb_tirs_ennemis);
 void dessiner_ennemis(Ennemi e[], int taille, SpritesEnnemi *s);
 
 void init_tirs_ennemis(TirEnnemi t[], int taille);
