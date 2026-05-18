@@ -5,10 +5,10 @@
 #include <allegro5/allegro.h>
 
 #define MAX_TIRS_ENNEMIS    64
-#define VITESSE_TIR_ENNEMI  2.5f
-#define COOLDOWN_TIR_ENNEMI 150
-#define VITESSE_CHARGE_MAX  2.0f
-#define DISTANCE_CHARGE     280.0f
+#define VITESSE_TIR_ENNEMI  3.5f    // tirs plus rapides (était 2.5)
+#define COOLDOWN_TIR_ENNEMI 130     // légèrement plus fréquent (était 150)
+#define VITESSE_CHARGE_MAX  3.5f    // kamikazes plus menaçants (était 2.0)
+#define DISTANCE_CHARGE     380.0f  // déclenchement charge plus tôt (était 280)
 
 // Types de comportement
 typedef enum {

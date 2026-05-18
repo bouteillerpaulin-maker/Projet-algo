@@ -236,6 +236,7 @@ void boucle_jeu(void) {
     Ennemi ennemis[MAX_ENNEMIS];
     Niveau niveau;
     Boss boss;
+    int nb_tourelles = MAX_TOURELLES;
     int niveau_courant = 1;
     int frame = 0;
     int score = 0;
@@ -268,7 +269,7 @@ void boucle_jeu(void) {
 
             // Le background et le menu s'animent en permanence
             maj_background();
-            maj_tourelles(tourelles, MAX_TOURELLES, missiles, MAX_MISSILES, joueur.x, joueur.y);
+            maj_tourelles(tourelles, MAX_TOURELLES, missiles, MAX_MISSILES, tirs, MAX_TIRS, joueur.x, joueur.y, &score);
             maj_missiles(missiles, MAX_MISSILES, joueur.x, joueur.y);
             menu_frame++;
 
@@ -281,7 +282,7 @@ void boucle_jeu(void) {
                             tirs, MAX_TIRS, tirs_ennemis, MAX_TIRS_ENNEMIS);
                 maj_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
 
-                script_niveau(&niveau, ennemis, MAX_ENNEMIS, frame);
+                script_niveau(&niveau, ennemis, MAX_ENNEMIS,tourelles, nb_tourelles, frame);
 
                 if (niveau.id == 3 && niveau.boss_phase && !boss.actif)
                     activer_boss(&boss);
@@ -340,6 +341,8 @@ void boucle_jeu(void) {
                         init_tirs(tirs, MAX_TIRS);
                         init_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
                         init_boss(&boss);
+                        init_tourelles(tourelles, MAX_TOURELLES);
+                        init_missiles(missiles, MAX_MISSILES);
                         init_joueur(&joueur);
                     } else {
                         etat = ETAT_VICTOIRE;
@@ -371,6 +374,8 @@ void boucle_jeu(void) {
                         init_tirs_ennemis(tirs_ennemis, MAX_TIRS_ENNEMIS);
                         init_niveau(&niveau, niveau_courant);
                         init_boss(&boss);
+                        init_tourelles(tourelles, MAX_TOURELLES);
+                        init_missiles(missiles, MAX_MISSILES);
                         frame = 0;
                         score = 0;
                         etat = ETAT_JEU;

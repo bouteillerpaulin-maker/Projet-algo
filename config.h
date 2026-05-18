@@ -5,9 +5,9 @@
 #define HAUTEUR_FENETRE  1000
 #define FPS              60
 
-#define VITESSE_JOUEUR   5
-#define VITESSE_TIR      10
-#define VITESSE_ENNEMI   3
+#define VITESSE_JOUEUR   6
+#define VITESSE_TIR      12
+#define VITESSE_ENNEMI   2
 #define VITESSE_BOSS     1
 
 #define MAX_TIRS         100
