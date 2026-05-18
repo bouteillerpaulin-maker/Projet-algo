@@ -6,6 +6,7 @@
 #include "tourelle.h"
 #include "tir.h"
 #include "config.h"
+#include "background.h"
 
 SpritesTourelle charger_sprites_tourelle(void) {
     SpritesTourelle s;
@@ -38,8 +39,8 @@ void liberer_sprites_tourelle(SpritesTourelle *s) {
 void init_tourelles(Tourelle t[], int taille) {
     for (int i = 0; i < taille; i++) {
         t[i].actif             = 0;
-        t[i].w                 = 80;
-        t[i].h                 = 80;
+        t[i].w                 = 160;
+        t[i].h                 = 160;
         t[i].pv                = 2;
         t[i].cooldown          = COOLDOWN_TOURELLE;
         t[i].angle_vers_joueur = 0;
@@ -61,9 +62,9 @@ void spawn_tourelle(Tourelle t[], int taille, float x, float y, int pv) {
         if (!t[i].actif) {
             t[i].actif        = 1;
             t[i].x            = x;
-            t[i].y            = HAUTEUR_FENETRE - 80.0f; // collee au bas de l'ecran
-            t[i].w            = 80;
-            t[i].h            = 80;
+            t[i].y            = HAUTEUR_FENETRE - 160.0f; // collee au bas de l'ecran
+            t[i].w            = 160;
+            t[i].h            = 160;
             t[i].pv           = pv;
             t[i].cooldown     = COOLDOWN_TOURELLE + rand() % 120;
             t[i].sprite_frame = 0;
@@ -101,10 +102,10 @@ void maj_tourelles(Tourelle t[], int nb_t,
     for (int i = 0; i < nb_t; i++) {
         if (!t[i].actif) continue;
 
-        // Meme vitesse que le decor (VITESSE_ENNEMI defini dans config.h)
-        t[i].x -= (float)VITESSE_ENNEMI;
+        // Calée sur la vitesse du sol (VITESSE_SOL dans background.h)
+        t[i].x -= VITESSE_SOL;
         // Toujours collee au sol
-        t[i].y = HAUTEUR_FENETRE - 80.0f;
+        t[i].y = HAUTEUR_FENETRE - 160.0f;
 
         if (t[i].x + t[i].w < 0) {
             t[i].actif = 0;

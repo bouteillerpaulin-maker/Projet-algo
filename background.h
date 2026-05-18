@@ -3,7 +3,9 @@
 
 #include <allegro5/allegro.h>
 
-#define NB_ETOILES 150
+#define NB_ETOILES  150
+#define HAUTEUR_SOL  80      // hauteur bande de sol en pixels
+#define VITESSE_SOL  2.0f    // vitesse scroll sol — partagee avec tourelle.c
 
 typedef struct {
     float x, y;

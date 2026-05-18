@@ -7,7 +7,7 @@
 #define MAX_TOURELLES       4       // max 4 a l'ecran (etait 10)
 #define MAX_MISSILES        8       // peu de missiles en vol (etait 30)
 #define COOLDOWN_TOURELLE   360     // tir toutes les 6s a 60fps (etait 180)
-#define VITESSE_MISSILE     2.2f    // missile lent et lisible (etait 3.0)
+#define VITESSE_MISSILE     3    // missile lent et lisible (etait 3.0)
 #define TRACKING_FORCE      0.06f   // guidage tres doux (etait 0.06)
 
 typedef struct {
@@ -22,7 +22,7 @@ typedef struct {
     int   age;          // frames depuis le lancement
 } Missile;
 
-#define MISSILE_DUREE_GUIDAGE  300   // guidage actif pendant 1.5s (90 frames), ensuite vol droit
+#define MISSILE_DUREE_GUIDAGE  300   // guidage actif pendant 300 frames, ensuite vol droit
 
 typedef struct {
     float x, y;
