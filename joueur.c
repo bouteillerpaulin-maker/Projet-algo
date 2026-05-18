@@ -8,8 +8,8 @@ static ALLEGRO_BITMAP *sprite_joueur   = NULL;
 static ALLEGRO_BITMAP *explosion[5]    = {NULL}; // 1explosion à 5explosion
 
 void init_joueur(Joueur *j) {
-    j->w            = 100;
-    j->h            = 50;
+    j->w            = 150;
+    j->h            = 75;
     j->x            = 100;
     j->y            = HAUTEUR_FENETRE / 2 - j->h / 2;
     j->vies         = 3;

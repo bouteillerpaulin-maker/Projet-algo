@@ -101,8 +101,8 @@ void maj_tourelles(Tourelle t[], int nb_t,
     for (int i = 0; i < nb_t; i++) {
         if (!t[i].actif) continue;
 
-        // Defilement lent vers la gauche
-        t[i].x -= 0.8f;
+        // Meme vitesse que le decor (VITESSE_ENNEMI defini dans config.h)
+        t[i].x -= (float)VITESSE_ENNEMI;
         // Toujours collee au sol
         t[i].y = HAUTEUR_FENETRE - 80.0f;
 
@@ -142,6 +142,7 @@ void maj_tourelles(Tourelle t[], int nb_t,
             for (int j = 0; j < nb_m; j++) {
                 if (!m[j].actif) {
                     m[j].actif = 1;
+                    m[j].age  = 0;
                     m[j].x    = t[i].x + t[i].w / 2.0f;
                     m[j].y    = t[i].y + t[i].h / 2.0f;
                     float dist = sqrtf(dx * dx + dy * dy);
@@ -166,16 +167,21 @@ void maj_missiles(Missile m[], int taille,
     for (int i = 0; i < taille; i++) {
         if (!m[i].actif) continue;
 
-        float dx   = joueur_x - m[i].x;
-        float dy   = joueur_y - m[i].y;
-        float dist = sqrtf(dx * dx + dy * dy);
+        m[i].age++;
 
-        if (dist > 5.0f) {
-            float cvx = (dx / dist) * VITESSE_MISSILE;
-            float cvy = (dy / dist) * VITESSE_MISSILE;
-            m[i].vx += (cvx - m[i].vx) * TRACKING_FORCE;
-            m[i].vy += (cvy - m[i].vy) * TRACKING_FORCE;
+        // Guidage actif seulement pendant les premieres frames
+        if (m[i].age < MISSILE_DUREE_GUIDAGE) {
+            float dx   = joueur_x - m[i].x;
+            float dy   = joueur_y - m[i].y;
+            float dist = sqrtf(dx * dx + dy * dy);
+            if (dist > 5.0f) {
+                float cvx = (dx / dist) * VITESSE_MISSILE;
+                float cvy = (dy / dist) * VITESSE_MISSILE;
+                m[i].vx += (cvx - m[i].vx) * TRACKING_FORCE;
+                m[i].vy += (cvy - m[i].vy) * TRACKING_FORCE;
+            }
         }
+        // Apres MISSILE_DUREE_GUIDAGE : vol rectiligne, plus de correction
 
         m[i].x += m[i].vx;
         m[i].y += m[i].vy;
@@ -201,19 +207,7 @@ void dessiner_tourelles(Tourelle t[], int taille, SpritesTourelle *s) {
         float bh = al_get_bitmap_height(sprite);
         al_draw_scaled_bitmap(sprite, 0, 0, bw, bh,
                               t[i].x, t[i].y, t[i].w, t[i].h, 0);
-
-        // Barre de vie au-dessus
-        float bar_x = t[i].x;
-        float bar_y = t[i].y - 10;
-        float bar_w = t[i].w;
-        float ratio = (float)t[i].pv / 2.0f; // base pv = 2 au niveau 1
-        if (ratio > 1.0f) ratio = 1.0f;
-        // Fond rouge
-        al_draw_filled_rectangle(bar_x, bar_y, bar_x + bar_w, bar_y + 5,
-                                 al_map_rgb(150, 0, 0));
-        // Vie restante verte
-        al_draw_filled_rectangle(bar_x, bar_y, bar_x + bar_w * ratio, bar_y + 5,
-                                 al_map_rgb(0, 220, 80));
+            
     }
 }
 
