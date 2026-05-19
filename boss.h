@@ -6,28 +6,40 @@
 
 typedef enum {
     BOSS_IDLE,
-    BOSS_LOADING,
     BOSS_CHARGING,
     BOSS_SHOOTING,
     BOSS_RESETING
 } BossState;
 
 typedef struct {
-
+    
+    int spawn_timer;
+    // =========================
+    // POSITION / PHYSIQUE
+    // =========================
     float x, y;
     float vx, vy;
 
     int w, h;
 
+    // =========================
+    // STATS
+    // =========================
     int pv;
     int actif;
+    int phase2;
 
+    // =========================
+    // IA / COMBAT
+    // =========================
     BossState state;
 
     int timer;
+    int shoot_burst;
 
-    int phase2;
-
+    // =========================
+    // SPRITES
+    // =========================
     ALLEGRO_BITMAP *idle[3];
     ALLEGRO_BITMAP *loading[3];
     ALLEGRO_BITMAP *charging[3];
@@ -38,6 +50,9 @@ typedef struct {
 
 } Boss;
 
+// =========================
+// FONCTIONS
+// =========================
 void init_boss(Boss *b);
 
 void activer_boss(Boss *b);

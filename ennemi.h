@@ -4,7 +4,7 @@
 
 #include <allegro5/allegro.h>
 
-#define MAX_TIRS_ENNEMIS    30
+#define MAX_TIRS_ENNEMIS    20
 #define VITESSE_TIR_ENNEMI  3.5f    // tirs plus rapides (était 2.5)
 #define COOLDOWN_TIR_ENNEMI 100     // légèrement plus fréquent (était 150)
 #define VITESSE_CHARGE_MAX  10.5f    // kamikazes plus menaçants (était 2.0)
