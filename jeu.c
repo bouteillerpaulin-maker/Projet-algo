@@ -245,6 +245,7 @@ void boucle_jeu(void) {
     SpritesTourelle sprites_tourelles;
 
     int touche_haut = 0, touche_bas = 0, touche_gauche = 0, touche_droite = 0;
+    int en_pause = 0;
 
     init_joueur(&joueur);
     init_boss(&boss);
@@ -274,6 +275,7 @@ void boucle_jeu(void) {
             menu_frame++;
 
             if (etat == ETAT_JEU) {
+                if (!en_pause) {
                 frame++;
 
                 maj_joueur(&joueur, touche_haut, touche_bas, touche_gauche, touche_droite);
@@ -287,7 +289,13 @@ void boucle_jeu(void) {
                 if (niveau.id == 3 && niveau.boss_phase && !boss.actif)
                     activer_boss(&boss);
 
-                maj_boss(&boss);
+                maj_boss(
+                &boss,
+                joueur.y,
+                tirs_ennemis,
+                MAX_TIRS_ENNEMIS
+                );
+
 
                 collisions_tirs_ennemis(tirs, MAX_TIRS, ennemis, MAX_ENNEMIS, &score);
 
@@ -348,6 +356,7 @@ void boucle_jeu(void) {
                         etat = ETAT_VICTOIRE;
                     }
                 }
+                } // fin pause
             }
             
 
@@ -384,6 +393,7 @@ void boucle_jeu(void) {
             } else if (etat == ETAT_JEU) {
                 switch (ev.keyboard.keycode) {
                     case ALLEGRO_KEY_ESCAPE: etat = ETAT_MENU; break;
+                    case ALLEGRO_KEY_P: en_pause = !en_pause; break;
                     case ALLEGRO_KEY_UP:     touche_haut    = 1; break;
                     case ALLEGRO_KEY_DOWN:   touche_bas     = 1; break;
                     case ALLEGRO_KEY_LEFT:   touche_gauche  = 1; break;
