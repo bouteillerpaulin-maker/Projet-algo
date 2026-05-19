@@ -32,9 +32,9 @@ void liberer_sprites_tourelle(SpritesTourelle *s) {
         if (s->frames[i]) al_destroy_bitmap(s->frames[i]);
 }
 
-// ----------------------------------------------------------------
-// Init
-// ----------------------------------------------------------------
+
+// Initialisation
+
 
 void init_tourelles(Tourelle t[], int taille) {
     for (int i = 0; i < taille; i++) {
@@ -57,7 +57,7 @@ void init_missiles(Missile m[], int taille) {
 }
 
 void spawn_tourelle(Tourelle t[], int taille, float x, float y, int pv) {
-    (void)y; // ignoree : on force toujours la tourelle au sol
+    (void)y; 
     for (int i = 0; i < taille; i++) {
         if (!t[i].actif) {
             t[i].actif        = 1;
