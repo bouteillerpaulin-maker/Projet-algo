@@ -35,7 +35,7 @@ void init_joueur(Joueur *j) {
 
 // Appelée à chaque fois que le joueur prend un dégât
 void joueur_prend_degat(Joueur *j) {
-    if (!j->vivant || j->invincible > 0) return; // déjà invincible → ignore
+    if (!j->vivant || j->invincible > 0) return; // déjà invincible = ignore
 
     j->vies--;
     j->en_explosion    = 1;
