@@ -133,27 +133,36 @@ void maj_tourelles(Tourelle t[], int nb_t,
         // Angle vers le joueur
         float dx = joueur_x - (t[i].x + t[i].w / 2.0f);
         float dy = joueur_y - (t[i].y + t[i].h / 2.0f);
+
+        // vecteur direction  = angle
         t[i].angle_vers_joueur = atan2f(dy, dx);
+
+        // angle = direction de sprite (orientation visuelle)
         t[i].sprite_frame = frame_depuis_angle(t[i].angle_vers_joueur);
 
         // Tir
         if (t[i].cooldown > 0) {
-            t[i].cooldown--;
+            t[i].cooldown--; // temporisation tir
         } else {
+            // recherche d'un missile libre 
             for (int j = 0; j < nb_m; j++) {
                 if (!m[j].actif) {
                     m[j].actif = 1;
-                    m[j].age  = 0;
-                    m[j].x    = t[i].x + t[i].w / 2.0f;
-                    m[j].y    = t[i].y + t[i].h / 2.0f;
+                    m[j].age = 0;
+                    // spawn au centre de la tourelle
+                    m[j].x = t[i].x + t[i].w / 2.0f;
+                    m[j].y = t[i].y + t[i].h / 2.0f;
+                    // norme du vecteur direction
                     float dist = sqrtf(dx * dx + dy * dy);
                     if (dist > 0.01f) {
+                        // normalisation = direction unitaire
                         m[j].vx = (dx / dist) * VITESSE_MISSILE;
                         m[j].vy = (dy / dist) * VITESSE_MISSILE;
                     }
                     break;
                 }
             }
+            // reset cooldown
             t[i].cooldown = COOLDOWN_TOURELLE;
         }
     }
@@ -208,7 +217,6 @@ void dessiner_tourelles(Tourelle t[], int taille, SpritesTourelle *s) {
         float bh = al_get_bitmap_height(sprite);
         al_draw_scaled_bitmap(sprite, 0, 0, bw, bh,
                               t[i].x, t[i].y, t[i].w, t[i].h, 0);
-            
     }
 }
 
