@@ -5,14 +5,14 @@
 #include <allegro5/allegro.h>
 
 #define MAX_TIRS_ENNEMIS    20
-#define VITESSE_TIR_ENNEMI  3.5f    // tirs plus rapides (était 2.5)
-#define COOLDOWN_TIR_ENNEMI 100     // légèrement plus fréquent (était 150)
-#define VITESSE_CHARGE_MAX  10.5f    // kamikazes plus menaçants (était 2.0)
-#define DISTANCE_CHARGE     380.0f  // déclenchement charge plus tôt (était 280)
+#define VITESSE_TIR_ENNEMI  3.5f    // tirs plus rapides 
+#define COOLDOWN_TIR_ENNEMI 100     // légèrement plus fréquent 
+#define VITESSE_CHARGE_MAX  10.5f    // kamikazes plus menaçants 
+#define DISTANCE_CHARGE     380.0f  // déclenchement charge plus tôt 
 
 // Types de comportement
 typedef enum {
-    COMPORT_SERPENT   = 0,  // sinusoïde en serpent (défaut)
+    COMPORT_SERPENT   = 0,  // sinusoïde en serpent 
     COMPORT_VAGUE     = 1,  // tout le groupe monte/descend ensemble
     COMPORT_TOURBILLON= 2,  // rotation autour d'un centre
     COMPORT_KAMIKAZE  = 3,  // fonce en accélérant vers le joueur
