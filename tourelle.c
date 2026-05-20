@@ -73,10 +73,8 @@ void spawn_tourelle(Tourelle t[], int taille, float x, float y, int pv) {
     }
 }
 
-// ----------------------------------------------------------------
-// Angle → frame sprite
-// Tourelles au sol → joueur toujours au-dessus (angle ~270° en Allegro)
-// ----------------------------------------------------------------
+// Angle = frame sprite
+// Tourelles au sol = joueur toujours au-dessus (angle ~270° en Allegro)
 static int frame_depuis_angle(float angle) {
     float deg = angle * 180.0f / 3.14159f;
     if (deg < 0) deg += 360.0f;
@@ -90,9 +88,7 @@ static int frame_depuis_angle(float angle) {
     return 0;
 }
 
-// ----------------------------------------------------------------
-// Mise a jour tourelles — destructibles par les tirs joueur
-// ----------------------------------------------------------------
+// Mise a jour tourelles - destructibles par les tirs joueur
 
 void maj_tourelles(Tourelle t[], int nb_t,
                    Missile m[], int nb_m,
@@ -112,7 +108,7 @@ void maj_tourelles(Tourelle t[], int nb_t,
             continue;
         }
 
-        // --- Collision avec les tirs du joueur ---
+        // Collision avec les tirs du joueur
         for (int j = 0; j < nb_tirs_joueur; j++) {
             if (!tirs_joueur[j].actif) continue;
             if (tirs_joueur[j].x < t[i].x + t[i].w &&
@@ -168,9 +164,7 @@ void maj_tourelles(Tourelle t[], int nb_t,
     }
 }
 
-// ----------------------------------------------------------------
-// Missiles a tete chercheuse douce
-// ----------------------------------------------------------------
+// Missiles a tete chercheuse
 
 void maj_missiles(Missile m[], int taille,
                   float joueur_x, float joueur_y) {
@@ -202,9 +196,7 @@ void maj_missiles(Missile m[], int taille,
     }
 }
 
-// ----------------------------------------------------------------
 // Dessin — avec barre de vie si pv >= 2
-// ----------------------------------------------------------------
 
 void dessiner_tourelles(Tourelle t[], int taille, SpritesTourelle *s) {
     for (int i = 0; i < taille; i++) {
