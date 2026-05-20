@@ -45,7 +45,7 @@ void init_background(void) {
 }
 
 void maj_background(void) {
-    // Étoiles
+    // Etoiles
     for (int i = 0; i < NB_ETOILES; i++) {
         etoiles[i].x -= etoiles[i].vitesse;
         if (etoiles[i].x < 0) {
@@ -67,7 +67,7 @@ void dessiner_background(void) {
     // Fond noir espace
     al_clear_to_color(al_map_rgb(0, 0, 10));
 
-    // Étoiles
+    // Etoiles
     for (int i = 0; i < NB_ETOILES; i++) {
         int v = (int)(etoiles[i].luminosite * 255);
         ALLEGRO_COLOR couleur = al_map_rgb(v, v, v);
@@ -82,7 +82,7 @@ void dessiner_background(void) {
         }
     }
 
-    // Sol défilant — on tile le sprite sur toute la largeur
+    // Sol défilant - on tile le sprite sur toute la largeur
     if (sol_sprite) {
         float tile_w = (float)al_get_bitmap_width(sol_sprite);
         float tile_h = (float)al_get_bitmap_height(sol_sprite);
