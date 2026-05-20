@@ -17,15 +17,11 @@
 #include "background.h"
 #include "tourelle.h"
 
-// ----------------------------------------------------------------
 // Variables globales du menu
-// ----------------------------------------------------------------
 static int   menu_frame    = 0;   // compteur pour animations menu
 static float titre_pulse   = 0.0f;
 
-// ----------------------------------------------------------------
-// Dessine un bouton stylé avec fond semi-transparent et bordure
-// ----------------------------------------------------------------
+// Dessine un bouton avec fond semi-transparent et bordure
 static void dessiner_bouton(ALLEGRO_FONT *font, const char *texte,
                              float cx, float cy, float w, float h,
                              int selectionne) {
@@ -50,7 +46,7 @@ static void dessiner_bouton(ALLEGRO_FONT *font, const char *texte,
         // Fond très sombre
         al_draw_filled_rounded_rectangle(x, y, x + w, y + h, 8, 8,
                                          al_map_rgba(255, 255, 255, 15));
-        // Bordure grise discrète
+        // Bordure grise 
         al_draw_rounded_rectangle(x, y, x + w, y + h, 8, 8,
                                   al_map_rgba(150, 150, 150, 80), 1.0f);
         // Texte gris
@@ -59,19 +55,17 @@ static void dessiner_bouton(ALLEGRO_FONT *font, const char *texte,
     }
 }
 
-// ----------------------------------------------------------------
-// Menu principal stylé
-// ----------------------------------------------------------------
+// Menu principal
 static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
     // Background étoiles
     dessiner_background();
 
     float cx = LARGEUR_FENETRE / 2.0f;
 
-    // --- Ligne décorative haut ---
+    // Ligne décorative haut
     al_draw_line(cx - 400, 220, cx + 400, 220, al_map_rgba(0, 180, 255, 80), 1.0f);
 
-    // --- Titre avec pulsation ---
+    // Titre avec pulsation
     titre_pulse = sinf(menu_frame * 0.05f);
     float scale = 1.0f + titre_pulse * 0.03f;
     (void)scale; // builtin font ne supporte pas le scaling, on garde l'effet couleur
@@ -80,7 +74,7 @@ static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
     al_draw_text(font, al_map_rgba(0, 100, 200, 120),
                  cx + 3, 133, ALLEGRO_ALIGN_CENTER, "ECE-TYPE");
 
-    // Titre principal — couleur qui pulse entre blanc et cyan
+    // Titre principal - couleur qui pulse entre blanc et cyan
     int pulse_v = (int)(200 + titre_pulse * 55);
     al_draw_text(font, al_map_rgb(pulse_v, pulse_v, 255),
                  cx, 130, ALLEGRO_ALIGN_CENTER, "ECE-TYPE");
@@ -89,10 +83,10 @@ static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
     al_draw_text(font, al_map_rgba(100, 180, 255, 180),
                  cx, 175, ALLEGRO_ALIGN_CENTER, "- SHOOT'EM UP -");
 
-    // --- Ligne décorative bas titre ---
+    // Ligne décorative bas titre
     al_draw_line(cx - 400, 210, cx + 400, 210, al_map_rgba(0, 180, 255, 80), 1.0f);
 
-    // --- Boutons ---
+    // Boutons 
     const char *items[] = {
         "NOUVELLE PARTIE",
         "NIVEAU 1",
@@ -114,7 +108,7 @@ static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
                         i == selection);
     }
 
-    // --- Pied de page ---
+    // Pied de page
     al_draw_text(font, al_map_rgba(80, 80, 120, 180),
                  cx, HAUTEUR_FENETRE - 40,
                  ALLEGRO_ALIGN_CENTER,
@@ -132,9 +126,7 @@ static void dessiner_menu(ALLEGRO_FONT *font, int selection) {
     }
 }
 
-// ----------------------------------------------------------------
-// Game over stylé
-// ----------------------------------------------------------------
+// Game over
 static void dessiner_game_over(ALLEGRO_FONT *font) {
     dessiner_background();
 
@@ -159,9 +151,7 @@ static void dessiner_game_over(ALLEGRO_FONT *font) {
                  "Appuyez sur ENTREE pour revenir au menu");
 }
 
-// ----------------------------------------------------------------
-// Victoire stylée
-// ----------------------------------------------------------------
+// Victoire 
 static void dessiner_victoire(ALLEGRO_FONT *font) {
     dessiner_background();
 
@@ -183,9 +173,7 @@ static void dessiner_victoire(ALLEGRO_FONT *font) {
                  "Appuyez sur ENTREE pour revenir au menu");
 }
 
-// ----------------------------------------------------------------
 // Boucle principale
-// ----------------------------------------------------------------
 void boucle_jeu(void) {
     ALLEGRO_DISPLAY *display = NULL;
     ALLEGRO_EVENT_QUEUE *queue = NULL;
