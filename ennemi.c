@@ -6,9 +6,7 @@
 #include "ennemi.h"
 #include "config.h"
 
-// ----------------------------------------------------------------
 // Chargement des sprites
-// ----------------------------------------------------------------
 
 SpritesEnnemi charger_sprites_ennemi(void) {
     SpritesEnnemi s;
@@ -48,9 +46,7 @@ void liberer_sprites_ennemi(SpritesEnnemi *s) {
         if (s->explosion[i]) al_destroy_bitmap(s->explosion[i]);
 }
 
-// ----------------------------------------------------------------
 // Tirs ennemis
-// ----------------------------------------------------------------
 
 void init_tirs_ennemis(TirEnnemi t[], int taille) {
     for (int i = 0; i < taille; i++) {
@@ -90,9 +86,7 @@ static void tirer_ennemi(TirEnnemi tirs[], int nb_tirs, float x, float y) {
     }
 }
 
-// ----------------------------------------------------------------
 // Init
-// ----------------------------------------------------------------
 
 static void reset_ennemi(Ennemi *e) {
     e->actif           = 0;
@@ -192,9 +186,7 @@ void spawn_groupe(Ennemi e[], int taille, float x, float y_centre, int nb, int p
     }
 }
 
-// ----------------------------------------------------------------
 // Mise à jour
-// ----------------------------------------------------------------
 
 void maj_ennemis(Ennemi e[], int taille, float joueur_x, float joueur_y,
                  Tir tirs[], int nb_tirs,
@@ -223,8 +215,8 @@ void maj_ennemis(Ennemi e[], int taille, float joueur_x, float joueur_y,
         float dy   = joueur_y - e[i].y;
         float dist = sqrtf(dx * dx + dy * dy);
 
-        // --- ESQUIVE DES TIRS ---
-        // Vérifie si un tir joueur est proche → dévie verticalement
+        // ESQUIVE DES TIRS
+        // Vérifie si un tir joueur est proche : dévie verticalement
         float esquive = 0.0f;
         for (int t = 0; t < nb_tirs; t++) {
             if (!tirs[t].actif) continue;
@@ -232,7 +224,7 @@ void maj_ennemis(Ennemi e[], int taille, float joueur_x, float joueur_y,
             float tdy = tirs[t].y - (e[i].y + e[i].h / 2.0f);
             float tdist = sqrtf(tdx * tdx + tdy * tdy);
             if (tdist < 120.0f && tdx > -20.0f) {
-                // Tir proche et venant vers l'ennemi → esquive
+                // Tir proche et venant vers l'ennemi : esquive
                 esquive = (tdy > 0) ? -2.0f : 2.0f;
                 break;
             }
@@ -240,7 +232,7 @@ void maj_ennemis(Ennemi e[], int taille, float joueur_x, float joueur_y,
         // Interpolation douce de l'esquive
         e[i].esquive_vy += (esquive - e[i].esquive_vy) * 0.1f;
 
-        // --- COMPORTEMENT ---
+        // COMPORTEMENT 
         if (e[i].comport == COMPORT_KAMIKAZE) {
             // Fonce vers le joueur en accélérant
             if (dist > 5.0f) {
@@ -331,9 +323,7 @@ void maj_ennemis(Ennemi e[], int taille, float joueur_x, float joueur_y,
     }
 }
 
-// ----------------------------------------------------------------
 // Dessin
-// ----------------------------------------------------------------
 
 void dessiner_ennemis(Ennemi e[], int taille, SpritesEnnemi *s) {
     for (int i = 0; i < taille; i++) {
