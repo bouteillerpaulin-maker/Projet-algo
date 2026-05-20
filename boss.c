@@ -8,9 +8,7 @@
 
 #define DASH_SPEED 14
 
-// =========================
 // INIT
-// =========================
 
 void init_boss(Boss *b) {
 
@@ -35,9 +33,7 @@ void init_boss(Boss *b) {
 
     b->shoot_burst = 0;
 
-    // =========================
     // SPRITES
-    // =========================
 
     b->idle[0] = al_load_bitmap("bossidle1.png");
     b->idle[1] = al_load_bitmap("bossidle2.png");
@@ -60,9 +56,7 @@ void init_boss(Boss *b) {
     b->shooting = al_load_bitmap("bossshooting.png");
 }
 
-// =========================
 // ACTIVER
-// =========================
 
 void activer_boss(Boss *b) {
 
@@ -80,9 +74,7 @@ void activer_boss(Boss *b) {
     b->timer = 0;
 }
 
-// =========================
 // UPDATE IA
-// =========================
 
 void maj_boss(Boss *b,
               float joueur_y,
@@ -91,9 +83,7 @@ void maj_boss(Boss *b,
                 if (!b->actif)
     return;
 
-// =========================
 // SPAWN DELAY (4 SECONDES)
-// =========================
 
 if (b->spawn_timer > 0) {
     b->spawn_timer--;
@@ -104,16 +94,12 @@ if (b->spawn_timer > 0) {
 
     b->timer++;
 
-    // =========================
     // PHASE 2
-    // =========================
 
     if (b->pv <= 50)
         b->phase2 = 1;
 
-    // =========================
     // TRACKING Y (ADOUCI)
-    // =========================
 
     float speed_y = b->phase2 ? 2.0f : 1.5f;
 
@@ -125,9 +111,7 @@ float diff = joueur_y - b->y;
     else if (diff < -60)
         b->y -= speed_y;
 
-    // =========================
-    // IDLE → CHOIX ACTION
-    // =========================
+    // IDLE : CHOIX ACTION
 
     if (b->state == BOSS_IDLE) {
 
@@ -150,9 +134,7 @@ float diff = joueur_y - b->y;
         }
     }
 
-    // =========================
     // CHARGING (RUSH + SHOOT)
-    // =========================
 
     else if (b->state == BOSS_CHARGING) {
 
@@ -188,9 +170,7 @@ float diff = joueur_y - b->y;
         }
     }
 
-    // =========================
     // SHOOT BURST
-    // =========================
 
     else if (b->state == BOSS_SHOOTING) {
 
@@ -217,9 +197,7 @@ float diff = joueur_y - b->y;
         }
     }
 
-    // =========================
     // RESET
-    // =========================
 
     else if (b->state == BOSS_RESETING) {
 
@@ -231,9 +209,7 @@ float diff = joueur_y - b->y;
     }
 }
 
-// =========================
 // DRAW
-// =========================
 
 void dessiner_boss(Boss *b) {
 
@@ -259,9 +235,7 @@ void dessiner_boss(Boss *b) {
         al_draw_bitmap(sprite, b->x, b->y, 0);
     }
 
-    // =========================
     // HP BAR
-    // =========================
 
     al_draw_filled_rectangle(
         300, 40,
